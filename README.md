@@ -18,4 +18,4 @@ pip install py-dep-graph
 
 ## License
 
-`py-dep-graph` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
+`py-dep-graph` is distributed under the terms of the GPL-2.0 license.
