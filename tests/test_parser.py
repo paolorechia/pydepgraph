@@ -1,7 +1,7 @@
-from py_dep_graph.parser import parse_imports
+from py_dep_graph.parser import ImportParser
 
 def test_parser():
-    import_statements = parse_imports("""
+    import_statements = ImportParser("""
     import something
 
     import another
@@ -48,7 +48,7 @@ def test_parser():
         cool,
         stuff
     )
-""")
+""").parse()
     print(import_statements)
     assert import_statements[0] == "something"
     assert import_statements[1] == "another"
