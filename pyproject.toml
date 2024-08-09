@@ -62,5 +62,6 @@ exclude_lines = [
 
 [tool.hatch.envs.test]
 dependencies = [
-  "pytest"
+  "pytest",
+  "pytest-watcher"
 ]
