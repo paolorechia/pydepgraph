@@ -12,8 +12,14 @@ def test_parser():
     import newone, \\
         newtwo, \\
         newthree
-                                      
+                                       
     import (pone, ptwo, pthree)
+                                      
+    import (
+        pmlone,
+        pmltwo,
+        pmlthree
+    )
 """)
     print(import_statements)
     assert import_statements[0] == "something"
@@ -25,3 +31,8 @@ def test_parser():
     assert import_statements[6] == "newtwo"
     assert import_statements[7] == "newthree"
     assert import_statements[8] == "pone"
+    assert import_statements[9] == "ptwo"
+    assert import_statements[10] == "pthree"
+    assert import_statements[11] == "pmlone"
+    assert import_statements[12] == "pmltwo"
+    assert import_statements[13] == "pmlthree"

@@ -12,8 +12,8 @@ def parse_imports(sourcecode: str) -> List[str]:
     import_statements = []
     parsing_import = False
     parsing_next_parameter = False
-    in_break_line = False
-
+    parsing_parenthesis_group = False
+ 
     current_import_statement = ""
     for char in sourcecode:
         # If not currently parsing an import statement, just apply logic until the next statement
@@ -29,8 +29,30 @@ def parse_imports(sourcecode: str) -> List[str]:
 
         # Otherwise, try to find all applicable arguments
         else:
+            # Case 0: arguments are delimited by parenthesis
+            if char == "(":
+                parsing_parenthesis_group = True
+                continue
+
+            elif parsing_parenthesis_group:
+                if char == ")":
+                    current_import_statement = "".join(word_buffer)
+                    import_statements.append(current_import_statement)
+                    parsing_import = False
+                    parsing_parenthesis_group = False
+                    continue
+                
+                if char == " " or char == "\n" or char == "\t":
+                    continue
+
+                if char == ',':
+                    current_import_statement = "".join(word_buffer)
+                    import_statements.append(current_import_statement)
+                    word_buffer = []
+                    continue
+
             # Case 1: single argument followed by \n
-            if char == "\n" and not parsing_next_parameter:
+            elif char == "\n" and not parsing_next_parameter:
                 current_import_statement = "".join(word_buffer)
                 parsing_import = False
                 import_statements.append(current_import_statement)
