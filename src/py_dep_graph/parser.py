@@ -10,19 +10,27 @@ def parse_imports(sourcecode: str) -> List[str]:
     """
     word_buffer = []
     import_statements = []
+    parsing_from = False
+    current_from_statement = ""
+
     parsing_import = False
     parsing_next_parameter = False
-    parsing_parenthesis_group = False
- 
+    parsing_parenthesis_group = False 
     current_import_statement = ""
+
     for char in sourcecode:
         # If not currently parsing an import statement, just apply logic until the next statement
         # is found
         if not parsing_import:
             if char == " ":
+                if parsing_from:
+                    current_from_statement = "".join(word_buffer)
+                    parsing_from = False
+
                 if "".join(word_buffer) == "import":
-                    print("Found import statement")
                     parsing_import = True
+                if "".join(word_buffer) == "from":
+                    parsing_from = True
                 word_buffer = []
             else:
                 word_buffer.append(char)
@@ -37,7 +45,11 @@ def parse_imports(sourcecode: str) -> List[str]:
             elif parsing_parenthesis_group:
                 if char == ")":
                     current_import_statement = "".join(word_buffer)
+                    if current_from_statement:
+                        current_import_statement = f"{current_from_statement}.{current_import_statement}"
                     import_statements.append(current_import_statement)
+
+                    current_from_statement = ""
                     parsing_import = False
                     parsing_parenthesis_group = False
                     continue
@@ -47,6 +59,8 @@ def parse_imports(sourcecode: str) -> List[str]:
 
                 if char == ',':
                     current_import_statement = "".join(word_buffer)
+                    if current_from_statement:
+                        current_import_statement = f"{current_from_statement}.{current_import_statement}"
                     import_statements.append(current_import_statement)
                     word_buffer = []
                     continue
@@ -54,13 +68,19 @@ def parse_imports(sourcecode: str) -> List[str]:
             # Case 1: single argument followed by \n
             elif char == "\n" and not parsing_next_parameter:
                 current_import_statement = "".join(word_buffer)
+                if current_from_statement:
+                    current_import_statement = f"{current_from_statement}.{current_import_statement}"
                 parsing_import = False
+                current_from_statement = ""
                 import_statements.append(current_import_statement)
                 continue
+
             # Case 2: multiple arguments defined by ,
             elif char == ",":
                 parsing_next_parameter = True
                 current_import_statement = "".join(word_buffer)
+                if current_from_statement:
+                    current_import_statement = f"{current_from_statement}.{current_import_statement}"
                 import_statements.append(current_import_statement)
                 word_buffer = []
                 continue
@@ -77,6 +97,9 @@ def parse_imports(sourcecode: str) -> List[str]:
                 if len(word_buffer) > 0:
                     if char == ",":
                         current_import_statement = "".join(word_buffer)
+                        if current_from_statement:
+                            current_import_statement = f"{current_from_statement}.{current_import_statement}"
+                        current_from_statement = ""
                         import_statements.append(current_import_statement)
                         word_buffer = []
                         continue
@@ -87,14 +110,17 @@ def parse_imports(sourcecode: str) -> List[str]:
                         parsing_next_parameter = False
                         parsing_import = False
                         current_import_statement = "".join(word_buffer)
+                        if current_from_statement:
+                            current_import_statement = f"{current_from_statement}.{current_import_statement}"
+                        current_from_statement = ""
                         import_statements.append(current_import_statement)
                         word_buffer = []
                         continue
 
             word_buffer.append(char)
 
-
-
-    return import_statements
+    # Filter out empty strings to handle edge case of trailing comma in parenthesis group, e.g.,
+    # (a,b,c,)
+    return [imp for imp in import_statements if imp]
 
 
