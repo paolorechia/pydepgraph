@@ -1,10 +1,11 @@
-from typing import List
+from __future__ import annotations
 
-def parse_imports(sourcecode: str) -> List[str]:
+
+def parse_imports(sourcecode: str) -> list[str]:
     """Parses the lines of a file, looking for import statements.
 
     This function implements a C like logic for handling string processing.
-    It tries to be really low level, so it can be very flexible. 
+    It tries to be really low level, so it can be very flexible.
 
     It could also be easily ported to C later if performance becomes a problem.
     """
@@ -15,7 +16,7 @@ def parse_imports(sourcecode: str) -> List[str]:
 
     parsing_import = False
     parsing_next_parameter = False
-    parsing_parenthesis_group = False 
+    parsing_parenthesis_group = False
     current_import_statement = ""
 
     for char in sourcecode:
@@ -42,7 +43,7 @@ def parse_imports(sourcecode: str) -> List[str]:
                 parsing_parenthesis_group = True
                 continue
 
-            elif parsing_parenthesis_group:
+            if parsing_parenthesis_group:
                 if char == ")":
                     current_import_statement = "".join(word_buffer)
                     if current_from_statement:
@@ -53,11 +54,11 @@ def parse_imports(sourcecode: str) -> List[str]:
                     parsing_import = False
                     parsing_parenthesis_group = False
                     continue
-                
-                if char == " " or char == "\n" or char == "\t":
+
+                if char in (" ", "\n", "\t"):
                     continue
 
-                if char == ',':
+                if char == ",":
                     current_import_statement = "".join(word_buffer)
                     if current_from_statement:
                         current_import_statement = f"{current_from_statement}.{current_import_statement}"
@@ -90,7 +91,7 @@ def parse_imports(sourcecode: str) -> List[str]:
                     continue
 
                 # Ignore whitespaces before filling the word buffer for next param
-                if len(word_buffer) == 0 and (char == " " or char == "\n"):
+                if len(word_buffer) == 0 and (char in (" ", "\n")):
                     continue
 
                 # If found an additional argument, push it and keep parsing
@@ -106,7 +107,7 @@ def parse_imports(sourcecode: str) -> List[str]:
 
                     # If found a newline after filling word buffer, import statement is fully parsed
                     # wrap it up
-                    if char == '\n' or char == " ":
+                    if char in ("\n", " "):
                         parsing_next_parameter = False
                         parsing_import = False
                         current_import_statement = "".join(word_buffer)
@@ -122,5 +123,3 @@ def parse_imports(sourcecode: str) -> List[str]:
     # Filter out empty strings to handle edge case of trailing comma in parenthesis group, e.g.,
     # (a,b,c,)
     return [imp for imp in import_statements if imp]
-
-

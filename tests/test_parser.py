@@ -1,5 +1,8 @@
 from py_dep_graph.parser import parse_imports
 
+# ruff: noqa
+
+
 def test_parser():
     import_statements = parse_imports("""
     import something
