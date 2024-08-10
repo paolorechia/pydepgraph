@@ -27,6 +27,10 @@ class DirNode(Node):
         children_repr_str = ", ".join(children_repr)
         return f"DirNode(name={self.name}, children={children_repr_str})"
 
+    def as_dict(self):
+        children = {child.name: child.as_dict() for child in self.children}
+        return {"type": "dir", "children": children}
+
 
 class SourceCodeFileNode(Node):
     """Represents a specific source code file node in tree"""
@@ -37,6 +41,9 @@ class SourceCodeFileNode(Node):
 
     def __repr__(self) -> str:
         return f"SourceCodeFileNode(name={self.name})"
+
+    def as_dict(self):
+        return {"type": "source_code_file"}
 
 
 class FileTree:
@@ -67,3 +74,6 @@ class FileTree:
                     child.add_child(DirNode(dir_, os.path.join(path, dir_), child))
 
                     self._walk_children(child)
+
+    def as_dict(self):
+        return {self.root_directory.name: self.root_directory.as_dict()}

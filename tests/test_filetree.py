@@ -56,3 +56,31 @@ def test_filetree():
                 ]
 
                 assert sorted([c.name for c in child.children[0].children]) == ["mod4.py"]
+
+
+def test_filetree_as_dict():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        create_test_filesystem(tmp_dir)
+        file_tree = FileTree(tmp_dir)
+
+        d = file_tree.as_dict()
+        root = d[tmp_dir]
+        assert root == {
+            "type": "dir",
+            "children": {
+                "pkg3": {"type": "dir", "children": {"mod5.py": {"type": "source_code_file"}}},
+                "pkg2": {
+                    "type": "dir",
+                    "children": {"pkg4": {"type": "dir", "children": {"mod4.py": {"type": "source_code_file"}}}},
+                },
+                "pkg1": {
+                    "type": "dir",
+                    "children": {
+                        "mod2.py": {"type": "source_code_file"},
+                        "mod3.py": {"type": "source_code_file"},
+                        "mod1.py": {"type": "source_code_file"},
+                    },
+                },
+                "mod6.py": {"type": "source_code_file"},
+            },
+        }
