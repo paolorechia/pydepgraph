@@ -46,12 +46,13 @@ def test_filetree():
 
         for child in file_tree.root_directory.children:
             if child.name == "pkg3":
-                assert sorted([c.name for c in child.children]) == [
-                    "mod5.py"
-                ]
+                assert sorted([c.name for c in child.children]) == ["mod5.py"]
             elif child.name == "pkg1":
+                assert sorted([c.name for c in child.children]) == ["mod1.py", "mod2.py", "mod3.py"]
+
+            elif child.name == "pkg2":
                 assert sorted([c.name for c in child.children]) == [
-                    "mod1.py",
-                    "mod2.py",
-                    "mod3.py"
+                    "pkg4",
                 ]
+
+                assert sorted([c.name for c in child.children[0].children]) == ["mod4.py"]

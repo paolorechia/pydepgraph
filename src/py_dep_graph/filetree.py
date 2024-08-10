@@ -53,21 +53,17 @@ class FileTree:
             if ".py" in f:
                 self.root_directory.add_child(SourceCodeFileNode(f, os.path.join(path, f), self.root_directory))
 
-        # Need to convert into recursive DFS to match os.walk
-        path, directories, files = next(iter_)
-        current_dir = None
-        for child in self.root_directory.children:
-            if child.filepath == path:
-                current_dir: DirNode = child
-                break
+        self._walk_children(self.root_directory)
 
-        assert current_dir, "Programming error logic"
+    def _walk_children(self, dir_node: DirNode):
+        for child in dir_node.children:
+            if isinstance(child, DirNode):
+                path, directories, files = next(os.walk(child.filepath))
+                for f in files:
+                    if ".py" in f:
+                        child.add_child(SourceCodeFileNode(f, os.path.join(path, f), child))
 
-        for dir_ in directories:
-            current_dir.add_child(DirNode(dir_, os.path.join(path, dir_), self.root_directory))
+                for dir_ in directories:
+                    child.add_child(DirNode(dir_, os.path.join(path, dir_), child))
 
-        for f in files:
-            if ".py" in f:
-                current_dir.add_child(SourceCodeFileNode(f, os.path.join(path, f), self.root_directory))
-        
-        print(current_dir)
+                    self._walk_children(child)
