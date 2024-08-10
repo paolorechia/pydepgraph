@@ -3,6 +3,28 @@ import tempfile
 
 from py_dep_graph.filetree import FileTree
 
+mock_files = {
+    "mod1.py": """
+    import .mod2
+    from .mod3 import stuff
+""",
+    "mod2.py": """
+
+    def my_func():
+        pass
+
+""",
+    "mod3.py": """
+
+    def stuff():
+        print("hello stuff")
+
+""",
+    "mod4.py": "",
+    "mod5.py": "",
+    "mod6.py": "",
+}
+
 
 def walk_dict(path: str, d: dict):
     for key, item in d.items():
@@ -16,7 +38,8 @@ def walk_dict(path: str, d: dict):
         else:
             filepath = os.path.join(path, key)
             with open(filepath, "w") as fp:
-                fp.write("")
+                file_contents = mock_files[key]
+                fp.write(file_contents)
 
 
 def create_test_filesystem(tmp_dir_root):
