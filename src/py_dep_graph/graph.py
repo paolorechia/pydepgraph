@@ -9,3 +9,4 @@ if TYPE_CHECKING:
 class DependencyGraph:
     def __init__(self, file_tree) -> None:
         self.file_tree: FileTree = file_tree
+        self.nodes = []

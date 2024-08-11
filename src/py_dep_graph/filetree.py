@@ -88,3 +88,17 @@ class FileTree:
 
     def as_dict(self):
         return {self.root_directory.name: self.root_directory.as_dict()}
+
+
+def _walk_sct(dir_: DirNode, nodes: list[SourceCodeFileNode]):
+    for child in dir_.children:
+        if isinstance(child, SourceCodeFileNode):
+            nodes.append(child)
+        else:
+            _walk_sct(child, nodes)
+
+
+def walk_source_code_tree(root: DirNode) -> list[SourceCodeFileNode]:
+    nodes: list[SourceCodeFileNode] = []
+    _walk_sct(root, nodes)
+    return nodes

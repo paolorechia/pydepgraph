@@ -1,4 +1,4 @@
-from py_dep_graph.filetree import FileTree
+from py_dep_graph.filetree import FileTree, walk_source_code_tree
 
 
 def test_filetree(tmp_dir):
@@ -87,3 +87,13 @@ def test_filetree_as_dict(tmp_dir):
             },
         },
     }
+
+
+def test_filetree_walk(tmp_dir):
+    file_tree = FileTree(tmp_dir)
+    source_code_nodes = walk_source_code_tree(file_tree.root_directory)
+
+    assert len(source_code_nodes) == 6
+
+    assert source_code_nodes[0].name == "mod5.py"
+    assert source_code_nodes[0].parent.name == "pkg3"
