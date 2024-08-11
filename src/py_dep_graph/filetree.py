@@ -39,7 +39,7 @@ class SourceCodeFileNode(Node):
     """Represents a specific source code file node in tree"""
 
     def __init__(self, name: str, filepath: str, parent: DirNode) -> None:
-        super().__init__(name, filepath)
+        super().__init__(name.strip(".py"), filepath)
         self.parent: DirNode = parent
         with open(filepath) as fp:
             self.source_code = fp.read()
