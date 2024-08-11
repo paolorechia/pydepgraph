@@ -41,7 +41,7 @@ def test_parser():
         spmltwo,
         spmlthree,
     )
-                                      
+                     
     import doo.foo
                                       
     from nested.pkg import ultra
@@ -52,7 +52,6 @@ def test_parser():
         stuff
     )
 """)
-    print(import_statements)
     assert import_statements[0] == "something"
     assert import_statements[1] == "another"
     assert import_statements[2] == "one"
