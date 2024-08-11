@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import hashlib
 import os
+
+from py_dep_graph.parser import parse_imports
 
 
 class Node:
@@ -38,12 +41,19 @@ class SourceCodeFileNode(Node):
     def __init__(self, name: str, filepath: str, parent: DirNode) -> None:
         super().__init__(name, filepath)
         self.parent: DirNode = parent
+        with open(filepath) as fp:
+            self.source_code = fp.read()
+        self.hash = hashlib.sha256(self.source_code.encode("utf-8")).hexdigest()
+        self.imports = parse_imports(self.source_code)
 
     def __repr__(self) -> str:
         return f"SourceCodeFileNode(name={self.name})"
 
     def as_dict(self):
-        return {"type": "source_code_file"}
+        return {
+            "type": "source_code_file",
+            "hash": self.hash,
+        }
 
 
 class FileTree:

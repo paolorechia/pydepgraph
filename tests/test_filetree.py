@@ -91,19 +91,49 @@ def test_filetree_as_dict():
         assert root == {
             "type": "dir",
             "children": {
-                "pkg3": {"type": "dir", "children": {"mod5.py": {"type": "source_code_file"}}},
+                "pkg3": {
+                    "type": "dir",
+                    "children": {
+                        "mod5.py": {
+                            "type": "source_code_file",
+                            "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                        }
+                    },
+                },
                 "pkg2": {
                     "type": "dir",
-                    "children": {"pkg4": {"type": "dir", "children": {"mod4.py": {"type": "source_code_file"}}}},
+                    "children": {
+                        "pkg4": {
+                            "type": "dir",
+                            "children": {
+                                "mod4.py": {
+                                    "type": "source_code_file",
+                                    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                }
+                            },
+                        }
+                    },
                 },
                 "pkg1": {
                     "type": "dir",
                     "children": {
-                        "mod2.py": {"type": "source_code_file"},
-                        "mod3.py": {"type": "source_code_file"},
-                        "mod1.py": {"type": "source_code_file"},
+                        "mod2.py": {
+                            "type": "source_code_file",
+                            "hash": "9e56cf21cd105ec7a715b0a355e4e8dcc1bd0ebd3f02935ee224063cfb6870d8",
+                        },
+                        "mod3.py": {
+                            "type": "source_code_file",
+                            "hash": "af29547b948ff540e18cde4494b87a77a32b0c0b80c79e3c3a963abf36355002",
+                        },
+                        "mod1.py": {
+                            "type": "source_code_file",
+                            "hash": "fe0d67af8c1aba435046c4843c788d4baf4ea29705b4757d3f8d54a20f62e81c",
+                        },
                     },
                 },
-                "mod6.py": {"type": "source_code_file"},
+                "mod6.py": {
+                    "type": "source_code_file",
+                    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                },
             },
         }
