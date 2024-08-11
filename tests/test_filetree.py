@@ -16,13 +16,26 @@ mock_files = {
 """,
     "mod3.py": """
 
+    import mod6
+
     def stuff():
         print("hello stuff")
 
 """,
-    "mod4.py": "",
-    "mod5.py": "",
-    "mod6.py": "",
+    "mod4.py": """
+
+    def some_func():
+        pass
+
+""",
+    "mod5.py": """
+   from pkg2.pkg4.mod4 import some_func
+
+""",
+    "mod6.py": """
+    import os
+    import somelib
+""",
 }
 
 
@@ -96,7 +109,8 @@ def test_filetree_as_dict():
                     "children": {
                         "mod5.py": {
                             "type": "source_code_file",
-                            "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                            "hash": "0b4231dfcd62cdd19ad235a3fa3ed3e01eb12ff262f259fafd4cd290d8e3d1a8",
+                            "imports": ["pkg2.pkg4.mod4.some_func"],
                         }
                     },
                 },
@@ -108,7 +122,8 @@ def test_filetree_as_dict():
                             "children": {
                                 "mod4.py": {
                                     "type": "source_code_file",
-                                    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                    "hash": "f2ad41580e726691b2381b3b30e901e3d9bd70dadc6234b028b91f285b6bb693",
+                                    "imports": [],
                                 }
                             },
                         }
@@ -120,20 +135,24 @@ def test_filetree_as_dict():
                         "mod2.py": {
                             "type": "source_code_file",
                             "hash": "9e56cf21cd105ec7a715b0a355e4e8dcc1bd0ebd3f02935ee224063cfb6870d8",
+                            "imports": [],
                         },
                         "mod3.py": {
                             "type": "source_code_file",
-                            "hash": "af29547b948ff540e18cde4494b87a77a32b0c0b80c79e3c3a963abf36355002",
+                            "hash": "7744ffeade24a187572ca745e99016402f56d196335bc2850bd43756e083a909",
+                            "imports": ["mod6"],
                         },
                         "mod1.py": {
                             "type": "source_code_file",
                             "hash": "fe0d67af8c1aba435046c4843c788d4baf4ea29705b4757d3f8d54a20f62e81c",
+                            "imports": [".mod2", ".mod3.stuff"],
                         },
                     },
                 },
                 "mod6.py": {
                     "type": "source_code_file",
-                    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "hash": "79331d076c3b91d63f6d15f94cae2f9c1eeef2c32460b2cbb468e006bd37f420",
+                    "imports": ["os", "somelib"],
                 },
             },
         }

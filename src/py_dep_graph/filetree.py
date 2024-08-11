@@ -44,7 +44,7 @@ class SourceCodeFileNode(Node):
         with open(filepath) as fp:
             self.source_code = fp.read()
         self.hash = hashlib.sha256(self.source_code.encode("utf-8")).hexdigest()
-        self.imports = parse_imports(self.source_code)
+        self.imports = sorted(parse_imports(self.source_code))
 
     def __repr__(self) -> str:
         return f"SourceCodeFileNode(name={self.name})"
@@ -53,6 +53,7 @@ class SourceCodeFileNode(Node):
         return {
             "type": "source_code_file",
             "hash": self.hash,
+            "imports": self.imports,
         }
 
 
